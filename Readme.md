@@ -1,5 +1,5 @@
 # SSH客户端交互式使用说明
-
+# 这是一个大学生用来探索Github Action跨平台编译的项目，路人请回避（）
 ## 启动程序
 ```bash
 cargo run --release
