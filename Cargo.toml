@@ -1,0 +1,8 @@
+[package]
+name = "ssh_client_rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ssh2 = "0.9"
+clap = { version = "4.5.40", features = ["derive", "env"] }
