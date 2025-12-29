@@ -58,29 +58,24 @@ jobs:
     - name: 安装依赖 (macOS)
       if: startsWith(matrix.os, 'macos')
       run: |
-        # 安装OpenSSL和pkg-config
-        brew install openssl@3 pkg-config
-        # 设置环境变量
-        echo "OPENSSL_DIR=$(brew --prefix openssl@3)" >> $GITHUB_ENV
-        echo "PKG_CONFIG_PATH=$(brew --prefix openssl@3)/lib/pkgconfig" >> $GITHUB_ENV
+        # vendored-openssl会自动编译OpenSSL，macOS已经有perl和make
+        echo "Using vendored OpenSSL - no additional dependencies needed"
 
     - name: 安装依赖 (Linux)
       if: startsWith(matrix.os, 'ubuntu')
       run: |
+        # vendored-openssl需要perl和make（通常已经预装）
         sudo apt-get update
-        sudo apt-get install -y libssl-dev pkg-config
+        sudo apt-get install -y perl make
 
     - name: 安装依赖 (Windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        # Windows runner已经预装了OpenSSL
-        echo "Using vcpkg OpenSSL on Windows"
+        # Windows需要Perl来编译vendored OpenSSL
+        choco install strawberryperl -y
 
     - name: 构建
       run: cargo build --release --target ${{ matrix.target }}
-      env:
-        # 确保使用vcpkg的OpenSSL（Windows）
-        VCPKG_ROOT: ${{ runner.os == 'Windows' && 'C:/vcpkg' || '' }}
 
     - name: 重命名二进制文件
       shell: bash
